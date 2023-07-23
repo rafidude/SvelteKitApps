@@ -1,9 +1,10 @@
-let todos = [];
+let todos = [
+	{ id: 1, title: 'Learn Svelte', completed: false },
+	{ id: 2, title: 'Learn Sapper', completed: false },
+	{ id: 3, title: 'Learn SvelteKit', completed: false }
+];
 
 export async function load() {
-	const response = await fetch('http://localhost:3000/todos');
-	const todos_res = await response.json();
-	todos = todos_res.Todos;
 	return {
 		todos: todos
 	};
@@ -34,13 +35,7 @@ export const actions = {
 
 	delete: async ({ request }) => {
 		const data = await request.formData();
-		const id = Number(data.get('id'));
 
-		const response = await fetch(`http://localhost:3000/todos/${id}`, {
-			method: 'DELETE'
-		});
-		if (!response.ok) {
-			todos = todos.filter((todo) => todo.id !== Number(data.get('id')));
-		}
+		todos = todos.filter((todo) => todo.id !== Number(data.get('id')));
 	}
 };
