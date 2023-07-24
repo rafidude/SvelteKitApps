@@ -1,5 +1,6 @@
 <script>
 	export let data;
+    export let form;
     let title = '';
     let completed = false;
     let editId = null;
@@ -12,7 +13,9 @@
 </script>
 
 <h1 class="text-2xl font-bold mb-5">Manage Todos</h1>
-
+{#if form?.error}
+    <h2 class="text-xl font-bold mb-5 text-red-500">{form.error}</h2>
+{/if}
 <form id="todoForm" class="mb-5 bg-white p-5 rounded shadow" method="POST" action={editId ? `?/edit` : '?/create'}>
     <div class="mb-4">
         <label for="todo" class="block text-sm font-bold mb-2">Todo:</label>
