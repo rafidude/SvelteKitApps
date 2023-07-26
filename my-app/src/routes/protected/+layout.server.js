@@ -5,7 +5,6 @@ export const load = async (event) => {
     if (!session) {
         throw redirect(307, 'auth/signin')
     }
-    console.log('session', session)
     return {
         session,
     }
