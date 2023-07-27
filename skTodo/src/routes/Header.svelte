@@ -18,6 +18,7 @@
       <a href="/todos" class="text-sm font-semibold leading-6 text-gray-900">TodoS</a>
       <a href="/todoh" class="text-sm font-semibold leading-6 text-gray-900">TodoH</a>
       <a href="/todoj" class="text-sm font-semibold leading-6 text-gray-900">TodoJSON</a>
+      <a href="/add" class="text-sm font-semibold leading-6 text-gray-900">Add API</a>
     </div>
     <div class="hidden lg:flex lg:flex-1 lg:justify-end">
       <a href="#top" class="text-sm font-semibold leading-6 text-gray-900">Log in <span aria-hidden="true">&rarr;</span></a>

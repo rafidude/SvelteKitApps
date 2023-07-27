@@ -1,19 +1,11 @@
-import { redirect } from '@sveltejs/kit';
-
 let todos = [
-	{ id: crypto.randomUUID(), title: 'Learn SvelteKit', completed: false },
-	{ id: crypto.randomUUID(), title: 'Learn Go', completed: false },
-	{ id: crypto.randomUUID(), title: 'Learn Prompts', completed: false }
+	{ id: 1, title: 'Learn Svelte', completed: false },
+	{ id: 2, title: 'Learn Sapper', completed: false },
+	{ id: 3, title: 'Learn SvelteKit', completed: false }
 ];
 
-export async function load(event) {
-	const session = await event.locals.getSession();
-	if (!session) {
-		throw redirect(307, 'auth/signin');
-	}
-
+export async function load() {
 	return {
-		session,
 		todos: todos
 	};
 }
@@ -22,15 +14,15 @@ export const actions = {
 	create: async ({ request }) => {
 		const data = await request.formData();
 		todos.push({
-			id: crypto.randomUUID(),
+			id: todos.length + 1,
 			title: String(data.get('title')),
-			completed: Boolean(data.get('completed'))
+			completed: false
 		});
 	},
 
 	edit: async ({ request }) => {
 		const data = await request.formData();
-		const id = String(data.get('id'));
+		const id = Number(data.get('id'));
 		const newTitle = String(data.get('title'));
 		const newCompleted = Boolean(data.get('completed'));
 		const todoIndex = todos.findIndex((todo) => todo.id === id);
@@ -44,6 +36,6 @@ export const actions = {
 	delete: async ({ request }) => {
 		const data = await request.formData();
 
-		todos = todos.filter((todo) => todo.id !== String(data.get('id')));
+		todos = todos.filter((todo) => todo.id !== Number(data.get('id')));
 	}
 };

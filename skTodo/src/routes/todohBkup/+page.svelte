@@ -13,7 +13,7 @@
 
 <h1 class="text-2xl font-bold mb-5">Manage Todos</h1>
 
-<form id="todoForm" class="mb-5 bg-white p-5 rounded shadow" method="POST" action={editId ? '?/edit' : '?/create'}>
+<form id="todoForm" class="mb-5 bg-white p-5 rounded shadow" method="POST" action={editId ? `?/edit` : '?/create'}>
     <div class="mb-4">
         <label for="todo" class="block text-sm font-bold mb-2">Todo:</label>
         <input
