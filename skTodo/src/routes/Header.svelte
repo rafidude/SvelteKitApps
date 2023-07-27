@@ -17,7 +17,8 @@
     <div class="hidden lg:flex lg:gap-x-12">
       <a href="/todos" class="text-sm font-semibold leading-6 text-gray-900">TodoS</a>
       <a href="/todoh" class="text-sm font-semibold leading-6 text-gray-900">TodoH</a>
-      <a href="/todoj" class="text-sm font-semibold leading-6 text-gray-900">TodoJSON</a>
+      <a href="/todojsrv" class="text-sm font-semibold leading-6 text-gray-900">TodoJSONServer</a>
+      <a href="/todojcli" class="text-sm font-semibold leading-6 text-gray-900">TodoJSONClient</a>
       <a href="/add" class="text-sm font-semibold leading-6 text-gray-900">Add API</a>
     </div>
     <div class="hidden lg:flex lg:flex-1 lg:justify-end">

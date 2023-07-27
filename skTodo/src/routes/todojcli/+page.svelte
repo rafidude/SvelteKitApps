@@ -1,19 +1,65 @@
 <script>
-	export let data;
+	// export let data;
+    import { onMount } from 'svelte';
+
     let title = '';
     let completed = false;
     let editId = null;
+	let todos = [];
+
+    const callTodoAPI = async (todo) => {
+        let method_type = "PUT";
+        if (editId = "") {
+            method_type = "POST";
+        }
+        const response = await fetch('api/todos', {
+            method: method_type,
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ todo })
+        });
+        return response.json();
+    }
+
+    onMount(async () => {
+        const response = await fetch('http://localhost:5173/api/todos');
+        if (response.ok) {
+            const json = await response.json();
+            todos = json.todos;
+        }
+    });
 
     const editTodo = (todo) => {
         title = todo.title;
         completed = todo.completed;
         editId = todo.id;
     };
+     
+    async function saveTodo(event) {
+        const todo = { id: editId, title, completed };
+        const json = await callTodoAPI(todo)
+        if (json.success) {
+            console.log('saveTodo', editId, json.todo);
+            if (editId) {
+                console.log('saveTodo', index);
+                const index = todos.findIndex((todo) => todo.id === editId);
+                todos[index].title = todo.title;
+                todos[index].completed = todo.completed;
+            } else {
+                todos.push(todo);
+            }
+            title = '';
+            completed = false;
+            editId = null;
+        }
+    };
 </script>
 
 <h1 class="text-2xl font-bold mb-5">Manage Todos</h1>
 
-<form id="todoForm" class="mb-5 bg-white p-5 rounded shadow" method="POST" action={editId ? `?/edit` : '?/create'}>
+<form id="todoForm" class="mb-5 bg-white p-5 rounded shadow" on:submit|preventDefault={saveTodo} 
+    action={editId ? '?/edit' : '?/create'}>
     <div class="mb-4">
         <label for="todo" class="block text-sm font-bold mb-2">Todo:</label>
         <input
@@ -64,7 +110,7 @@
         </tr>
     </thead>
     <tbody>
-        {#each data.todos as todo, i}
+        {#each todos as todo, i}
         <tr class="todo-row" data-id="{todo.id}">
             <td class="todo-title border px-4 py-2 text-sm">{todo.title}</td>
             <td class="todo-completed border px-4 py-2 text-sm">
