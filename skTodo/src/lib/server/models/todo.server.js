@@ -1,4 +1,4 @@
-import { db } from '$lib/models/db.server.js';
+import { db } from '$lib/server/models/db.server.js';
 
 export async function get_all() {
 	const selectQuery = `

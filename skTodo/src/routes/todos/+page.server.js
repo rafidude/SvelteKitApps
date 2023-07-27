@@ -1,5 +1,5 @@
 import { fail } from '@sveltejs/kit';
-import { get_all, create, update, remove } from '$lib/models/todo.server.js';
+import { get_all, create, update, remove } from '$lib/server/models/todo.server.js';
 let todos = [];
 
 export async function load() {

@@ -16,9 +16,8 @@
     </div>
     <div class="hidden lg:flex lg:gap-x-12">
       <a href="/todos" class="text-sm font-semibold leading-6 text-gray-900">TodoS</a>
-      <a href="/todog" class="text-sm font-semibold leading-6 text-gray-900">TodoG</a>
       <a href="/todoh" class="text-sm font-semibold leading-6 text-gray-900">TodoH</a>
-      <a href="#top" class="text-sm font-semibold leading-6 text-gray-900">Company</a>
+      <a href="/todoj" class="text-sm font-semibold leading-6 text-gray-900">TodoJSON</a>
     </div>
     <div class="hidden lg:flex lg:flex-1 lg:justify-end">
       <a href="#top" class="text-sm font-semibold leading-6 text-gray-900">Log in <span aria-hidden="true">&rarr;</span></a>
