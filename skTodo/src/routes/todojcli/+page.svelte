@@ -20,7 +20,7 @@
     };
 
     const callTodoAPI = async (todo, method_type) => {
-        const response = await fetch('api/todos', {
+        const response = await fetch('api/tododb', {
             method: method_type,
             headers: {
                 'Content-Type': 'application/json'
@@ -31,7 +31,7 @@
     }
 
     onMount(async () => {
-        const response = await fetch('http://localhost:5173/api/todos');
+        const response = await fetch('http://localhost:5173/api/tododb');
         if (response.ok) {
             const json = await response.json();
             todos = json.todos;

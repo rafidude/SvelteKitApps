@@ -15,14 +15,14 @@
       </button>
     </div>
     <div class="hidden lg:flex lg:gap-x-12">
-      <a href="/todos" class="text-sm font-semibold leading-6 text-gray-900">TodoS</a>
+      <a href="/tododb" class="text-sm font-semibold leading-6 text-gray-900">TodoDB</a>
       <a href="/todoh" class="text-sm font-semibold leading-6 text-gray-900">TodoH</a>
-      <a href="/todojsrv" class="text-sm font-semibold leading-6 text-gray-900">TodoJSONServer</a>
-      <a href="/todojcli" class="text-sm font-semibold leading-6 text-gray-900">TodoJSONClient</a>
+      <a href="/todojsrv" class="text-sm font-semibold leading-6 text-gray-900">TodoJSONHServer</a>
+      <a href="/todojcli" class="text-sm font-semibold leading-6 text-gray-900">TodoJSONDBClient</a>
       <a href="/add" class="text-sm font-semibold leading-6 text-gray-900">Add API</a>
     </div>
     <div class="hidden lg:flex lg:flex-1 lg:justify-end">
-      <a href="#top" class="text-sm font-semibold leading-6 text-gray-900">Log in <span aria-hidden="true">&rarr;</span></a>
+      <a href="auth/signout" class="text-sm font-semibold leading-6 text-gray-900">Logout <span aria-hidden="true">&rarr;</span></a>
     </div>
   </nav>
 

@@ -1,9 +1,6 @@
 import { redirect } from '@sveltejs/kit';
 
-let todos = [
-	{ id: crypto.randomUUID(), title: 'Learn SvelteKit', completed: false },
-	{ id: crypto.randomUUID(), title: 'Learn Go', completed: false }
-];
+let todos = [];
 
 export async function load(event) {
 	const session = await event.locals.getSession();
@@ -11,7 +8,7 @@ export async function load(event) {
 		throw redirect(307, 'auth/signin');
 	}
 	let todos_from_api = null;
-	const response = await event.fetch('api/todos');
+	const response = await event.fetch('api/todoh');
 	if (response.ok) {
 		const json = await response.json();
 		todos_from_api = json.todos;
@@ -32,8 +29,8 @@ export const actions = {
 			title: String(data.get('title')),
 			completed: Boolean(data.get('completed'))
 		};
-		// Call /api/todos post endpoint
-		const response = await fetch('api/todos', {
+
+		const response = await fetch('api/todoh', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'
@@ -49,8 +46,8 @@ export const actions = {
 			title: String(data.get('title')),
 			completed: Boolean(data.get('completed'))
 		};
-		// Call /api/todos PUT endpoint
-		const response = await fetch('api/todos', {
+
+		const response = await fetch('api/todoh', {
 			method: 'PUT',
 			headers: {
 				'Content-Type': 'application/json'
@@ -62,8 +59,7 @@ export const actions = {
 	delete: async ({ request, fetch }) => {
 		const data = await request.formData();
 
-		// Call /api/todos DELETE endpoint
-		const response = await fetch('api/todos', {
+		const response = await fetch('api/todoh', {
 			method: 'DELETE',
 			headers: {
 				'Content-Type': 'application/json'
