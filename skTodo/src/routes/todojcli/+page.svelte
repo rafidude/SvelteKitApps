@@ -1,17 +1,25 @@
 <script>
-	// export let data;
     import { onMount } from 'svelte';
 
+    // Page State
     let title = '';
     let completed = false;
     let editId = null;
 	let todos = [];
 
-    const callTodoAPI = async (todo) => {
-        let method_type = "PUT";
-        if (editId = "") {
-            method_type = "POST";
-        }
+    const editTodo = (todo) => {
+        title = todo.title;
+        completed = todo.completed;
+        editId = todo.id;
+    };
+
+    const resetTodoState = () => {
+        title = '';
+        completed = false;
+        editId = null;
+    };
+
+    const callTodoAPI = async (todo, method_type) => {
         const response = await fetch('api/todos', {
             method: method_type,
             headers: {
@@ -30,36 +38,45 @@
         }
     });
 
-    const editTodo = (todo) => {
-        title = todo.title;
-        completed = todo.completed;
-        editId = todo.id;
-    };
-     
-    async function saveTodo(event) {
+    async function updateTodo() {
         const todo = { id: editId, title, completed };
-        const json = await callTodoAPI(todo)
+        const method_type = "PUT";
+        const json = await callTodoAPI(todo, method_type)
         if (json.success) {
-            console.log('saveTodo', editId, json.todo);
-            if (editId) {
-                console.log('saveTodo', index);
-                const index = todos.findIndex((todo) => todo.id === editId);
-                todos[index].title = todo.title;
-                todos[index].completed = todo.completed;
-            } else {
-                todos.push(todo);
+            const index = todos.findIndex((todo) => todo.id === editId);
+            todos[index].title = todo.title;
+            todos[index].completed = todo.completed;
+            resetTodoState();
+        }
+    };
+
+    async function saveNewTodo() {
+        const todo = { title, completed };
+        const method_type = "POST";
+        const json = await callTodoAPI(todo, method_type)
+        if (json.success) {
+            todos = [...todos, json.todo];
+            resetTodoState();
+        }
+    };
+
+    async function deleteTodo(todo) {
+        const method_type = "DELETE";
+        const json = await callTodoAPI(todo, method_type)
+        if (json.success) {
+            const todoIndex = todos.findIndex((t) => t.id === todo.id);
+            console.log("delete", todoIndex)
+            if (todoIndex !== -1) {
+                todos.splice(todoIndex, 1);
             }
-            title = '';
-            completed = false;
-            editId = null;
+            todos = [...todos];
         }
     };
 </script>
 
 <h1 class="text-2xl font-bold mb-5">Manage Todos</h1>
 
-<form id="todoForm" class="mb-5 bg-white p-5 rounded shadow" on:submit|preventDefault={saveTodo} 
-    action={editId ? '?/edit' : '?/create'}>
+<form id="todoForm" class="mb-5 bg-white p-5 rounded shadow">
     <div class="mb-4">
         <label for="todo" class="block text-sm font-bold mb-2">Todo:</label>
         <input
@@ -84,15 +101,24 @@
         />
     </div>
     {#if editId}
-        <input type="hidden" name="id" bind:value={editId} />
+        <button
+                type="submit"
+                id="saveButton"
+                on:click={updateTodo}
+                class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            >
+            Update
+        </button>
+    {:else}
+        <button
+                type="submit"
+                id="saveButton"
+                on:click={saveNewTodo}
+                class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            >
+            Save
+        </button>
     {/if}
-   <button
-        type="submit"
-        id="saveButton"
-        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-    >
-        {editId ? 'Update' : 'Save'}
-    </button>
 </form>
 <table id="todoTable" class="w-full bg-white p-5 rounded shadow">
     <thead>
@@ -118,21 +144,19 @@
             </td>
             <td class="border px-4 py-2 text-sm">
                <button
-        class="edit-button bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-1 px-2 rounded focus:outline-none focus:shadow-outline"
-        on:click={() => editTodo(todo)}
-    >
-        Edit
-    </button>
+                    class="edit-button bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-1 px-2 rounded focus:outline-none focus:shadow-outline"
+                    on:click={() => editTodo(todo)}
+                >
+                    Edit
+                </button>
             </td>
             <td class="border px-4 py-2 text-sm">
-				<form method="POST" action="?/delete">
-					<input type="hidden" name="id" value={todo.id} />
-					<button
+                <button
                     class="edit-button bg-red-500 hover:bg-yellow-700 text-white font-bold py-1 px-2 rounded focus:outline-none focus:shadow-outline"
+                    on:click={() => deleteTodo(todo)}
                 >
                     Delete
                 </button>
-				</form>            
             </td>
         </tr>
         {/each}
