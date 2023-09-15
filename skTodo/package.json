@@ -37,6 +37,7 @@
 	"dependencies": {
 		"@auth/core": "^0.10.0",
 		"@auth/sveltekit": "^0.3.6",
+		"@supabase/supabase-js": "^2.33.1",
 		"dotenv": "^16.3.1",
 		"pg-promise": "^11.5.1"
 	}

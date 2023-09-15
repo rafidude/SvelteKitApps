@@ -1,10 +1,32 @@
 import { fail } from '@sveltejs/kit';
-import { get_all, create, update, remove } from '$lib/server/models/todo.server.js';
-let todos = [];
+import { supabase } from '$lib/supabaseClient';
+
+async function get_all() {
+	let { data: todo, error } = await supabase.from('todo').select('id, text, completed');
+	return { todos: todo ?? [] };
+}
+
+async function create(todo) {
+	const { data, error } = await supabase.from('todo').insert([todo]).select();
+	console.log(-11, data, error);
+	return { data, error };
+}
+
+async function update(todo) {
+	const { data, error } = await supabase
+		.from('todo')
+		.update({ other_column: 'otherValue' })
+		.eq('some_column', 'someValue')
+		.select()
+		.eq('id', todo.id);
+}
+
+async function remove() {
+	const { error } = await supabase.from('todo').delete().eq('some_column', 'someValue');
+}
 
 export async function load() {
-	const todos = await get_all();
-	console.log('in load - tododb');
+	const { todos } = await get_all();
 	return { todos };
 }
 
@@ -12,9 +34,12 @@ export const actions = {
 	create: async ({ request }) => {
 		let todo = {};
 		const data = await request.formData();
-		todo.title = String(data.get('title'));
+		todo.text = String(data.get('text'));
 		todo.completed = Boolean(data.get('completed'));
 		try {
+			if (todo.text === '') {
+				throw new Error('todo must have a text');
+			}
 			todo.id = await create(todo);
 			todos.push(todo);
 		} catch (error) {
@@ -28,7 +53,7 @@ export const actions = {
 		const data = await request.formData();
 		let todo = {};
 		todo.id = data.get('id');
-		todo.title = String(data.get('title'));
+		todo.text = String(data.get('text'));
 		todo.completed = Boolean(data.get('completed'));
 
 		try {
@@ -36,7 +61,7 @@ export const actions = {
 			const todoIndex = todos.findIndex((todo) => todo.id === id);
 
 			if (todoIndex !== -1) {
-				todos[todoIndex].title = todo.title;
+				todos[todoIndex].text = todo.text;
 				todos[todoIndex].completed = todo.completed;
 			}
 		} catch (error) {
