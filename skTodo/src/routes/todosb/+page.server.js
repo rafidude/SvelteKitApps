@@ -8,17 +8,12 @@ async function get_all() {
 
 async function create(todo) {
 	const { data, error } = await supabase.from('todo').insert([todo]).select();
-	console.log(-11, data, error);
 	return { data, error };
 }
 
 async function update(todo) {
-	const { data, error } = await supabase
-		.from('todo')
-		.update({ other_column: 'otherValue' })
-		.eq('some_column', 'someValue')
-		.select()
-		.eq('id', todo.id);
+	const { data, error } = await supabase.from('todo').update(todo).eq('id', todo.id).select();
+	return { data, error };
 }
 
 async function remove() {
@@ -41,7 +36,6 @@ export const actions = {
 				throw new Error('todo must have a text');
 			}
 			todo.id = await create(todo);
-			todos.push(todo);
 		} catch (error) {
 			return fail(422, {
 				error: error.message
@@ -55,15 +49,8 @@ export const actions = {
 		todo.id = data.get('id');
 		todo.text = String(data.get('text'));
 		todo.completed = Boolean(data.get('completed'));
-
 		try {
 			await update(todo);
-			const todoIndex = todos.findIndex((todo) => todo.id === id);
-
-			if (todoIndex !== -1) {
-				todos[todoIndex].text = todo.text;
-				todos[todoIndex].completed = todo.completed;
-			}
 		} catch (error) {
 			return fail(422, {
 				error: error.message
@@ -73,10 +60,10 @@ export const actions = {
 
 	delete: async ({ request }) => {
 		const data = await request.formData();
+
 		const id = data.get('id');
 		try {
 			await remove(id);
-			todos = todos.filter((todo) => todo.id !== id);
 		} catch (error) {
 			return fail(422, {
 				error: error.message

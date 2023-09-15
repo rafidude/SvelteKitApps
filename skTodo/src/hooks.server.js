@@ -5,7 +5,6 @@ import { redirect, json } from '@sveltejs/kit';
 import { sequence } from '@sveltejs/kit/hooks';
 
 async function authorization({ event, resolve }) {
-	console.log(-14, 'handle', event.url.pathname);
 	if (event.url.pathname.startsWith('/api')) {
 		const session = await event.locals.getSession();
 		if (!session) {
